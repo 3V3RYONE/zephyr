@@ -1,0 +1,43 @@
+/*
+ * Device tree overlay for VirtIO Serial on TI SK-AM62
+ *
+ * This configures:
+ * - Shared memory regions for VRINGs
+ * - Mailbox for inter-core communication
+ * - Memory protection (MPU)
+ */
+
+/ {
+	/* Define shared memory region for VirtIO VRINGs */
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		/* Shared memory for VRINGs - must match resource table addresses */
+		vring_shm: vring-shared-memory@a0000000 {
+			compatible = "shared-dma-pool";
+			reg = <0xa0000000 0x20000>;  /* 128KB for both vrings + buffers */
+			no-map;
+		};
+	};
+
+	/* Alias for easy reference */
+	aliases {
+		virtio-serial-shm = &vring_shm;
+	};
+};
+
+/* Configure mailbox for A53<->M4 communication */
+&mailbox0_cluster0 {
+	status = "okay";
+
+	mbox_m4: mbox-m4 {
+		ti,mbox-rx = <0 0 0>;
+		ti,mbox-tx = <1 0 0>;
+	};
+};
+
+/* Enable memory protection if needed */
+&mpu {
+	status = "okay";
+};

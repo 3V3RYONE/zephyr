@@ -1,0 +1,26 @@
+sample:
+  name: VirtIO Serial for Linux-Zephyr IPC
+  description: |
+    VirtIO RPROC_SERIAL device implementation for TI AM62x M4 core.
+    Demonstrates direct VirtIO communication with Linux without RPMsg layer.
+
+    When Linux writes to /dev/vportXpY, the M4 receives the data and logs
+    it to the console.
+
+tests:
+  sample.ipc.virtio_serial:
+    tags: ipc virtio openamp
+    harness: console
+    harness_config:
+      type: multi_line
+      ordered: true
+      regex:
+        - "VirtIO Serial Device - Zephyr on AM62x M4"
+        - "VirtIO Serial ready - waiting for Linux"
+    platform_allow:
+      - sk_am62/am6254/m4
+      - beagleplay/am6254/m4
+      - phyboard_lyra/am6234/m4
+      - verdin_am62/am6234/m4
+    integration_platforms:
+      - sk_am62/am6254/m4

@@ -1,0 +1,11 @@
+/*
+ * Copyright (c) 2024
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Device tree overlay for VirtIO Serial application on AM62x M4
+ */
+
+/* Enable mailbox for IPC with Linux */
+&mbox0 {
+	status = "okay";
+};
